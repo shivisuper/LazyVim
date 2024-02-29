@@ -31,7 +31,7 @@ return {
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local cmp = require("cmp")
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" } }))
+      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" }, { name = "copilot" } }))
     end,
   },
 
@@ -58,6 +58,23 @@ return {
     },
   },
 
+  -- configuring folke's flash plugin for searching within document
+  {
+    "folke/flash.nvim",
+    opts = {
+      search = {
+        mode = "search",
+      },
+      label = {
+        reuse = "all",
+        rainbow = {
+          enabled = true,
+          shade = 5,
+        },
+      },
+    },
+  },
+
   -- add telescope-fzf-native
   {
     "telescope.nvim",
@@ -78,15 +95,15 @@ return {
     opts = function(_, opts)
       -- add tsx and treesitter
       vim.list_extend(opts.ensure_installed, {
-        "html",
-        "javascript",
+        "clojure",
         "json",
+        "java",
         "lua",
         "markdown",
         "markdown_inline",
-        "python",
         "query",
         "regex",
+        "rust",
         "typescript",
         "vim",
         "yaml",
@@ -111,7 +128,9 @@ return {
         "stylua",
         "shellcheck",
         "shfmt",
-        "flake8",
+        "rust-analyzer",
+        "codelldb",
+        "clojure-lsp",
       },
     },
   },
@@ -165,6 +184,38 @@ return {
           end
         end, { "i", "s" }),
       })
+    end,
+  },
+  {
+    "Olical/conjure",
+    ft = { "clojure" },
+    keys = {
+      { "<leader>te", "<cmd>ConjureEvalCurrentForm<cr>", desc = "Evaluate current form" },
+      { "<leader>tw", "<cmd>ConjureEvalRootForm<cr>", desc = "Evaluate root form" },
+      { "<leader>tf", "<cmd>ConjureEvalFile<cr>", desc = "Evaluate file" },
+    },
+    dependencies = {
+      "PaterJason/cmp-conjure",
+      config = function()
+        local cmp = require("cmp")
+        local config = cmp.get_config()
+        table.insert(config.sources, {
+          name = "buffer",
+          option = {
+            sources = {
+              { name = "conjure" },
+            },
+          },
+        })
+        cmp.setup(config)
+      end,
+    },
+    config = function(_, opts)
+      require("conjure.main").main()
+      require("conjure.mapping")["on-filetype"]()
+    end,
+    init = function()
+      vim.g["conjure#debug"] = false
     end,
   },
 }

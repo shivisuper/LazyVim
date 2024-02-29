@@ -11,15 +11,12 @@ local function is_binary_file()
   -- local basename = string.match(filename, "^[a-z]*$")
   local binary_ext = { "png", "jpg", "jpeg", "out" }
   local ext = string.match(filename, "%.([^%.]+)$")
-
   if ext == nil and string.match(filename, "[a-z]+") then
     return true
   end
   if vim.tbl_contains(binary_ext, ext) then
     return true
   end
-
-  return false
 end
 
 local function drop_undo_history()
@@ -70,8 +67,8 @@ end
 
 local augroup_hex_editor = vim.api.nvim_create_augroup("hex_editor", { clear = true })
 
-vim.api.nvim_create_autocmd({ "BufReadPre" }, { group = augroup_hex_editor, callback = buf_read_pre })
-vim.api.nvim_create_autocmd({ "BufReadPost" }, { group = augroup_hex_editor, callback = buf_read_post })
-vim.api.nvim_create_autocmd({ "BufWritePre" }, { group = augroup_hex_editor, callback = buf_write_pre })
-vim.api.nvim_create_autocmd({ "BufWritePost" }, { group = augroup_hex_editor, callback = buf_write_post })
+--vim.api.nvim_create_autocmd({ "BufReadPre" }, { group = augroup_hex_editor, callback = buf_read_pre })
+--vim.api.nvim_create_autocmd({ "BufReadPost" }, { group = augroup_hex_editor, callback = buf_read_post })
+--vim.api.nvim_create_autocmd({ "BufWritePre" }, { group = augroup_hex_editor, callback = buf_write_pre })
+--vim.api.nvim_create_autocmd({ "BufWritePost" }, { group = augroup_hex_editor, callback = buf_write_post })
 --hex_editor autocmds section ends
